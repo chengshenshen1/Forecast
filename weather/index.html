@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Vue版本</title>
+	<link rel="stylesheet" type="text/css" href="css/weather.css">
+</head>
+
+<body>
+	<div class="container">
+		<header class="site_hd">
+			<div class="alert_info">您搜索的城市不能为空！</div>
+			<input class="serchvalue" type="text" name="serchvalue" placeholder="Your city name">
+			<button class="search" type="submit">
+				<span class="icon">&#xe679;</span> Search
+			</button>
+		</header>
+
+		<main class="site_bd">
+			<h2 class="site_title">Current weather and forecasts in your city</h2>
+			<!-- information -->
+			<div class="information">
+				<!--城市天气 -->
+				<div class="city_weather">
+					<h2 class="city_name">Weather In {{weatherData.name}},{{weatherData.sys.country}}</h2>
+					<h3>
+						<img class="weather_icon" v-bind:src="weatherData.imgSrc" alt="天气" />
+						<span class="temperature">{{weatherData.main.temp}} °C</span>
+					</h3>
+					<p class="description">{{weatherData.weather[0].description}}</p>
+					<p class="current_time">get at {{weatherData.currentTime}}</p>
+					<table class="city_weather_information">
+						<tr>
+							<td>Wind</td>
+							<td>
+								<p class="wind_speed">{{weatherData.speed}} {{weatherData.wind.speed}}</p>
+								<p class="wind_deg">{{weatherData.deg}} ( {{weatherData.wind.deg}} )</p>
+							</td>
+						</tr>
+						<tr>
+							<td>Cloudiness</td>
+							<td class="cloudiness">Sky is clear</td>
+						</tr>
+						<tr>
+							<td>Pressure</td>
+							<td class="pressure">{{weatherData.main.pressure}}hpa</td>
+						</tr>
+						<tr>
+							<td>Humidity</td>
+							<td class="humidity">{{weatherData.main.humidity}}%</td>
+						</tr>
+						<tr>
+							<td>Sunrise</td>
+							<td class="sunrise">{{weatherData.sunrise}}</td>
+						</tr>
+						<tr>
+							<td>Sunset</td>
+							<td class="sunset">{{weatherData.sunset}}</td>
+						</tr>
+						<tr>
+							<td>Geo coords</td>
+							<td>
+								<a class="coord" href="https://openweathermap.org/Maps?zoom=12&lat=31.22&lon=121.46&layers=B0FTTFF">[{{weatherData.coord.lat}}, {{weatherData.coord.lon}}]</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- end 城市天气 -->
+				<!-- 天气预报 -->
+				<div class="weather_forecast">
+					<div class="menu">
+						<a class="menu_item selected" id="hourly" href="#">Hourly</a>
+						<a class="menu_item " id="daily" href="#">Daily</a>
+					</div>
+					<h2>Hourly weather forecast</h2>
+					<div class="tab_content">
+
+						<div class="weather_hourly_information active">
+							<table v-for="hourly_item in hourlyData.list">
+								<tr class="hourly_weather_date_wrapper">
+									<th colspan="2" class="hourly_weather_date">{{hourly_item.date}} 
+										<span v-if="hourly_item.is_today">Today</span>
+									</th>
+								</tr>
+								<tr v-for="hourly_value in hourly_item.value">
+									<td class="td_left">
+										{{hourly_value.time}}
+										<img class="hourly_weather_icon" v-bind:src="hourly_value.weather[0].img_src">
+									</td>
+									<td class="td_right">
+										<span class="hourly_temp">{{hourly_value.main.temp}}</span>
+										<i>{{hourly_value.weather[0].description}}</i>
+										<p>{{hourly_value.main.temp_min}} {{hourly_value.main.temp_max}} °C {{hourly_value.wind.speed}} m/s. {{hourly_value.clouds.all}}%, {{hourly_value.main.pressure}} hpa</p>
+									</td>
+								</tr>
+							</table> 
+						</div>
+
+
+						<table class="weather_daily_information" >
+							<tr v-for="daily_item in dailyData.list">
+								<td class="td_left">
+									<span class="daily_weather_time">{{daily_item.date}}</span>
+									<img class="daily_weather_icon" v-bind:src="daily_item.element.weather[0].img_src">
+								</td>
+								<td class="td_right">
+									<span class="daily_temp daily_temp_max" v-bind:class="{ 'daily_temp_blue' : daily_item.isBlue}">{{daily_item.element.temp_max}}</span>
+									<span class="daily_temp daily_temp_min">{{daily_item.element.temp_min}}</span>
+									<i class="daily_weather_description">{{daily_item.element.weather[0].description}}</i>
+									<span class="daily_weather_speed">{{daily_item.element.speed}}</span>
+									<span class="daily_weather_clouds_pressure">could:{{daily_item.element.clouds}}%,{{daily_item.element.pressure}}hpa</span>
+								</td>
+							</tr>
+						</table>
+
+					</div>
+				</div>
+				<!-- end 天气预报 -->
+			</div>
+			<!-- end information -->
+		</main>
+	</div>
+	<script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/vue/2.1.3/vue.min.js"></script>
+	<script type="text/javascript" src="js/js.cookie.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+</body>
+
+</html>

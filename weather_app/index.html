@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>天气App</title>
+	<link rel="stylesheet" type="text/css" href="css/weather-icons.min.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body>
+	<div class="wrapper">
+		<!-- 主页 -->
+		<div class="home_wrapper" v-show="pageType==='homePage'">
+			<!-- 主页:顶部 -->
+			<header class="home_header">
+				<span class="icon_font head_menu" v-on:click="asideWrapperShow">&#xe628;</span>
+				<div class="header_right">
+					<span class="icon_font head_refresh">&#xe631;</span>
+					<span class="local_current_time">22:52</span>
+				</div>
+			</header>
+			<!-- end 主页:顶部 -->
+			<!-- 主页：sidebar -->
+			<div class="home_aside_wrapper" v-show="asideWrapperFlag" v-on:click="asideWrapperHide">
+				<aside class="home_aside" v-on:click.stop="asideWrapperHide">
+					<img class="aside_img" src="img/timg.jpg" alt="工具栏图片" />
+					<ul>
+						<li class="aside_item item_add_location" 
+						v-on:click="pageTypeToggle('addCityPage')">
+							<span class="icon_font">&#xe633;</span>
+							<span class="aside_item_text">Add location</span>
+						</li>
+						<li class="aside_item item_setting">
+							<span class="icon_font">&#xe602;</span>
+							<span class="aside_item_text">Settings</span>
+						</li>
+					</ul>
+				</aside>
+			</div>
+			<!-- end 主页：sidebar -->
+			
+			<!-- 主页：main -->
+			<main class="home_main">
+				<article class="show_added_city">
+					<section class="added_city" v-for="(weatherData, index) in weatherDataArray" :style="{backgroundColor: addedCityList[index].cityColor}">				
+						<div class="top">
+							<b class="added_city_name">{{weatherData.name}}</b>
+							<p class="added_country_name">{{weatherData.sys.country}}</p>
+							<span class="wi wi-day-sunny weather_icon"></span>
+							<span class="icon_font city_menu" v-on:click="removeCity(weatherData)">&#xe675;</span>
+						</div>
+						<div class="bottom">
+							<span class="weather_temp">{{weatherData.main.temp}}°</span>
+							<div class="weather_date">
+								<p class="city_current_time">{{weatherData.currentTime}}</p>
+								<p class="city_current_day">{{weatherData.currentDate}}</p>
+							</div>
+						</div>					
+					</section>
+				</article>
+			</main>
+			<!-- end 主页：main -->
+		</div>
+		<!-- end 主页 -->
+
+		<!-- 添加城市 -->
+		<div class="add_city_wrapper" v-show="pageType==='addCityPage'">
+			<header class="add_city_header">
+				<span class="icon_font back" v-on:click="pageTypeToggle('homePage')">&#xe612;</span>
+				<div class="srarch_container">
+					<span class="search_title">Search</span>
+					<input class="search_input" type="text" v-model="addedCityName" v-on:keyup.enter="addCity"/>
+				</div>
+			</header>
+			<main class="add_city_main">
+				<ul>
+					<li></li>
+				</ul>
+			</main>
+		</div>
+		<!-- 添加城市 -->
+	</div>
+	<script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+	<script src="http://cdn.bootcss.com/vue/2.1.3/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
